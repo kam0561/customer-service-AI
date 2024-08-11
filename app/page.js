@@ -11,7 +11,7 @@ import SendIcon from '@mui/icons-material/Send';
 export default function Home() {
   const [messages, setMessages]= useState([{
     role: 'assistant',
-    content: 'Hi, Im the HeadStart AI support Agent. How can i assist you today? ',
+    content: 'Hi, Im the HeadStarter AI support Agent. How can i assist you today? ',
   }])
 
   const [message, setMessage]= useState('')
@@ -24,7 +24,7 @@ export default function Home() {
       { role: 'assistant', content: '' },
     ]);
   
-    const response = await fetch('/api/chat', {
+    const response = await fetch('/api/chat/route.js', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
