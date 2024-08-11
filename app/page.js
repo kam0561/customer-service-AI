@@ -11,7 +11,7 @@ import SendIcon from '@mui/icons-material/Send';
 export default function Home() {
   const [messages, setMessages]= useState([{
     role: 'assistant',
-    content: 'Hi Im the HeadStart AI support Agent. How can i assist you today? ',
+    content: 'Hi, Im the HeadStart AI support Agent. How can i assist you today? ',
   }])
 
   const [message, setMessage]= useState('')
@@ -103,7 +103,7 @@ export default function Home() {
             label={'Message'}
             variant="filled"
             fullWidth
-            value={'Message'}
+            value={message}
             onChange={(e)=> setMessage(e.target.value)
             }
             sx={{
@@ -121,7 +121,7 @@ export default function Home() {
               },
             }}
             />
-            <Button variant="contained" color="success" endIcon={<SendIcon />}>
+            <Button variant="contained" color="success" onClick={sendMessage} endIcon={<SendIcon />}>
               Send
             </Button>
           </Stack>
