@@ -7,7 +7,7 @@ import { Button, TextField } from "@mui/material";
 import SendIcon from '@mui/icons-material/Send';
 
 export default function Home() {
-  const apiKey = process.env.GEMINI_API_KEY; 
+  const apiKey = process.env.GEMINI_API_KEY;
   const [messages, setMessages] = useState([{
     role: 'assistant',
     content: 'Hi, I\'m the HeadStarter AI support Agent. How can I assist you today?',
@@ -23,26 +23,28 @@ export default function Home() {
       { role: 'assistant', content: '' },
     ]);
 
-    const response = await fetch('https://generativelanguage.googleapis.com', { 
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${apiKey}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        model: 'gemini-1.0-pro', // Update with the specific model name for Gemini
-        messages: [
-          ...messages,
-          { role: 'user', content: message }
-        ],
-        stream: true, // Ensure streaming is supported
-      }),
-    }).then(async (res) => {
-      const reader = res.body.getReader();
+    try {
+      const response = await fetch('https://generativelanguage.googleapis.com/v1beta2/models/gemini-1.0-pro:generateText', { // Correct endpoint
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${apiKey}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          prompt: message, // Adjust based on actual API requirements
+        }),
+      });
+
+      if (!response.ok) {
+        const errorText = await response.text(); // Get error details
+        throw new Error(`HTTP error! Status: ${response.status}, Details: ${errorText}`);
+      }
+
+      const reader = response.body.getReader();
       const decoder = new TextDecoder();
 
       let result = '';
-      return reader.read().then(function processText({ done, value }) {
+      reader.read().then(function processText({ done, value }) {
         if (done) {
           return result;
         }
@@ -62,7 +64,9 @@ export default function Home() {
         });
         return reader.read().then(processText);
       });
-    });
+    } catch (error) {
+      console.error('Error:', error);
+    }
   };
 
   return (
