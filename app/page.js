@@ -24,19 +24,23 @@ export default function Home() {
     ]);
 
     try {
-      const response = await fetch('https://generativelanguage.googleapis.com/v1beta2/models/gemini-1.0-pro:generateText', { // Correct endpoint
+      const response = await fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=AIzaSyBuOtpMSCAhmNe2Wl9qcz8rqtCvFx2_2Uw', {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${apiKey}`,
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          prompt: message, // Adjust based on actual API requirements
+          model: 'gemini-1.5-flash-latest',
+          messages: [
+            { role: 'system', content: 'You are a helpful and professional customer support bot for HeadStarterAI.' },
+            { role: 'user', content: message },
+          ],
         }),
       });
 
       if (!response.ok) {
-        const errorText = await response.text(); // Get error details
+        const errorText = await response.text();
         throw new Error(`HTTP error! Status: ${response.status}, Details: ${errorText}`);
       }
 
@@ -135,7 +139,11 @@ export default function Home() {
               },
             }}
           />
-          <Button variant="contained" color="success" onClick={sendMessage} endIcon={<SendIcon />}>
+          <Button
+            variant="contained"
+            endIcon={<SendIcon />}
+            onClick={sendMessage}
+          >
             Send
           </Button>
         </Stack>
